@@ -1,0 +1,51 @@
+# .cursor
+# System prompt for Cursor AI to scaffold the Calendar Sync project
+# Keep it simple, demo-ready, and production-quality.
+
+# 🛠️ General rules
+- Always generate complete, runnable code (no TODOs, no placeholders).
+- Max line length: 100 characters.
+- Follow TypeScript best practices (strict mode, no any).
+- Use a single dependency per concern (e.g., express for HTTP, prisma for DB).
+- Do not add unnecessary dependencies. Prefer stdlib before third-party.
+- Keep each file under ~150 lines; if longer, split cleanly into modules.
+- Organize code in /src with clear separation:
+  - /src/server → API server (Express/Fastify)
+  - /src/routes → route handlers
+  - /src/services → external integrations (Google/Microsoft APIs)
+  - /src/db → Prisma schema + migrations
+  - /src/jobs → background worker logic
+  - /src/utils → small helpers
+- Use .env for config, never hardcode secrets.
+
+# 📦 Dependencies
+- express (or fastify) → API server
+- prisma → ORM + migrations
+- bullmq → queue (Redis)
+- node-fetch (if needed for API calls)
+- dotenv → config
+- typescript, ts-node-dev → dev tools
+- zod → input validation
+- (frontend later if time: next.js with tailwind)
+
+# 🚀 Project Goals
+Build a demo-ready MVP of a **privacy-first calendar sync** app:
+- Connect Google Calendar (OAuth).
+- Store account + token metadata in Postgres via Prisma.
+- Define sync rules (source calendar → dest calendars, privacy mode).
+- Mirror events from Google → Google calendar (MVP scope).
+- Replace titles with “Personal Event” if privacy mode = private.
+- Worker consumes jobs to sync new/updated events.
+
+# 🔑 Non-negotiables
+- Always return compilable TypeScript code.
+- Provide migrations for database schema.
+- Write minimal, self-contained examples for Google API integration (OAuth + fetch events).
+- Mark system-created events with metadata to avoid infinite sync loops.
+- Include README.md with setup instructions (npm install, npx prisma migrate dev, npm run dev).
+
+# 🖥️ Demo Constraints
+- Must run locally with `npm install && npx prisma migrate dev && npm run dev`.
+- Use SQLite for demo DB (no external infra needed).
+- Keep code short, direct, and runnable tomorrow.
+- Avoid over-engineering (no Docker, no Kubernetes).

@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  accounts  CalendarAccount[]
+  rules     SyncRule[]
+  createdAt DateTime @default(now())
+}
+
+model CalendarAccount {
+  id             String   @id @default(cuid())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  provider       String   // 'google'
+  providerUserId String
+  accessToken    String
+  refreshToken   String
+  tokenExpiry    DateTime
+  calendars      Calendar[]
+}
+
+model Calendar {
+  id          String   @id @default(cuid())
+  account     CalendarAccount @relation(fields: [accountId], references: [id])
+  accountId   String
+  providerCalId String
+  name        String
+  timezone    String
+}
+
+model SyncRule {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  sourceCalId String
+  destCalIds  String   // comma-separated list for demo
+  privacyMode String   // 'public' or 'private'
+  placeholder String
+  createdAt   DateTime @default(now())
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  userId    String
+  srcCalId  String
+  srcEvtId  String
+  title     String?
+  start     DateTime
+  end       DateTime
+  updatedAt DateTime @updatedAt
+}
